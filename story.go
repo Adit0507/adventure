@@ -79,12 +79,17 @@ var defaultHandlerTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-func NewHandler(s Story) http.Handler {
-	return handler{s}
+func NewHandler(s Story, t *template.Template) http.Handler {
+	if t == nil {
+		t = tpl
+	}
+
+	return handler{s, t}
 }
 
 type handler struct {
 	s Story
+	t *template.Template
 }
 
 func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -101,13 +106,13 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "something went wrong :(", http.StatusInternalServerError)
 
 		}
-		return 
+		return
 	}
 
 	http.Error(w, "Chapter not found.", http.StatusNotFound)
 }
 
-func JsonStory(r io.Reader) (Story, error) {
+func JSONStory(r io.Reader) (Story, error) {
 	d := json.NewDecoder(r)
 	var story Story
 	if err := d.Decode(&story); err != nil {
