@@ -1,28 +1,32 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
+
 	"github.com/nandotech/cyoa"
 )
 
 func main() {
-	filename := flag.String("file", "../../gopher.json", "the JSON file with the CYOA story")
+	port := flag.Int("port", 3000, "the port to start the CYOA web app")
+	filename := flag.String("file", "gopher.json", "the JSON file with the CYOA story")
 	flag.Parse()
 	fmt.Printf("Using the story %s\n", *filename)
 
 	f, err := os.Open(*filename)
-	if err!= nil {
+	if err != nil {
 		panic(err)
 	}
 
-	d := json.NewDecoder(f)
-	var story cyoa.Story
-	if err := d.Decode(&story); err!= nil{
-		fmt.Println("not working")
+	story, err := cyoa.JSONStory(f)
+	if err != nil {
+		panic(err)
 	}
 
-	fmt.Printf("%+v\n", story)
+	h := cyoa.NewHandler(story)
+	fmt.Printf("Starting the server on %d", *port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), h))
 }
