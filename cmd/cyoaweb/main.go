@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	// "html/template"
 	"log"
 	"net/http"
 	"os"
@@ -26,7 +27,7 @@ func main() {
 		panic(err)
 	}
 
-	h := cyoa.NewHandler(story, nil)
+	h := cyoa.NewHandler(story)
 	fmt.Printf("Starting the server on %d\n", *port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), h))
 }
