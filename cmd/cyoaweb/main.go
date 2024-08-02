@@ -28,7 +28,7 @@ func main() {
 		panic(err)
 	}
 
- 	tpl := template.Must(template.New("").Parse(storyTmpl))
+	tpl := template.Must(template.New("").Parse(storyTmpl))
 
 	h := cyoa.NewHandler(story, cyoa.WithTemplate(tpl), cyoa.WithPathFunc(pathFn))
 	mux := http.NewServeMux()
@@ -38,7 +38,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), mux))
 }
 
-func pathFn(r *http.Request) string {	
+func pathFn(r *http.Request) string {
 	path := strings.TrimSpace(r.URL.Path)
 	if path == "/story" || path == "/story/" {
 		path = "/story/intro"

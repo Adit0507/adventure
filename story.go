@@ -29,7 +29,7 @@ var defaultHandlerTemplate = `<!DOCTYPE html>
   {{if .Options}}
 	<ul>
 	{{range .Options}}
-	  <li><a href="/{{.Arc}}">{{.Text}}</a></li>
+	  <li><a href="/{{.Chapter}}">{{.Text}}</a></li>
 	{{end}}
 	</ul>
   {{else}}
